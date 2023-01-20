@@ -49,14 +49,14 @@ class _loginString2State extends State<loginString2> {
                   key: _formKey,
                   child: Column(children: [
                     Text(
-                      "Login",
+                      "Welcome",
                       style: TextStyle(
                           color: MyColors.blue,
                           fontSize: 30,
                           fontWeight: FontWeight.bold),
                     ),
-                    Text("Sign in with your Phone Number"),
-                    SizedBox(height: 30),
+                    const Text("Sign in with your Phone Number"),
+                    const SizedBox(height: 30),
                     TextFormField(
                       decoration: const InputDecoration(
                           labelText: "Phone Number",
@@ -77,12 +77,12 @@ class _loginString2State extends State<loginString2> {
                     SizedBox(height: 5 * deviceHeightr),
                     ElevatedButton(
                       onPressed: () => moveToHome(context),
-                      child: Text(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: MyColors.mustard),
+                      child: const Text(
                         "Sign in",
                         style: TextStyle(color: Colors.black),
                       ),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: MyColors.mustard),
                     ),
                   ])),
             ),

@@ -14,10 +14,10 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashState extends State<SplashScreen> {
   @override
-  void initState() {
-    super.initState();
-    Timer(const Duration(seconds: 2), check); // add check function to run
-  }
+  // void initState() {
+  //   super.initState();
+  //   Timer(const Duration(seconds: 2), check); // add check function to run
+  // }
 
   void scaffold(text, context) {
     final snackBar = SnackBar(content: Text(text));
@@ -44,16 +44,22 @@ class _SplashState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/background.png"),
-            fit: BoxFit.cover,
+        backgroundColor: Colors.black,
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/splashBg.gif"),
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        child: Center(child: Text("hi")),
-      )
-    );
+          child: Center(
+              child: Container(
+                  height: 200,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage("assets/images/logo.png"))))),
+        ));
   }
 }

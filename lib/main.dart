@@ -7,7 +7,7 @@ import 'Screens/SignupScreen/SignupScreen.dart';
 import 'Screens/SplashScreens/splash.dart';
 import 'Screens/home/home.dart';
 import 'firebase_options.dart';
-import 'Screens/login/login.dart';
+// import 'Screens/login/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       color: Colors.indigo[900],
-      initialRoute: '/login',
+      initialRoute: '/splash',
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/GetStated': (context) => const GetStated(),
