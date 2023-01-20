@@ -1,4 +1,5 @@
 // ignore_for_file: use_key_in_widget_constructors
+import 'package:CRM/Screens/login/login2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Screens/GetStated/GetStated.dart';
@@ -22,14 +23,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       color: Colors.indigo[900],
-      initialRoute: '/splash',
+      initialRoute: '/login',
       routes: {
         '/splash': (context) => const SplashScreen(),
-        '/GetStated':(context) => const GetStated(),
-        '/login': (context) => const LoginScreen(),
-        '/login/signup':(context) => const SignupScreen(),
-
-
+        '/GetStated': (context) => const GetStated(),
+        '/login': (context) => const loginString2(),
+        '/login/signup': (context) => const SignupScreen(),
         '/home': (context) => Home(),
       },
     );
