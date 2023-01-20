@@ -14,10 +14,10 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashState extends State<SplashScreen> {
   @override
-  // void initState() {
-  //   super.initState();
-  //   Timer(const Duration(seconds: 2), check); // add check function to run
-  // }
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 2), check); // add check function to run
+  }
 
   void scaffold(text, context) {
     final snackBar = SnackBar(content: Text(text));

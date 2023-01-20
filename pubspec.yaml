@@ -41,6 +41,7 @@ dependencies:
   fluttertoast: ^8.1.2
   google_fonts: ^3.0.1
   animated_splash_screen: ^1.3.0
+  trinetra: ^1.0.2
 
 dev_dependencies:
   flutter_test:

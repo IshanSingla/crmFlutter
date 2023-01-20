@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:trinetra/request/request.dart';
 
+import '../../utils/colors.dart';
 import 'components/search_bar.dart';
-import 'Components/Card.dart';
+import 'Components/card.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,6 +14,83 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Widget buildCard(List data) {
+    Size size = MediaQuery.of(context).size;
+    bool dataFound = false;
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(6.0),
+          child: SearchBar(),
+        ),
+        (data).isEmpty
+            ? SizedBox(
+                height: size.height * 0.67,
+                child: const Center(
+                    child: Text(
+                  'No Buissness Found',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                )),
+              )
+            : Column(
+                children: data
+                    .asMap()
+                    .entries
+                    .map((entry) {
+                      int idx = entry.key;
+                      String val = entry.value;
+                      if (dataFound) {
+                        dataFound = false;
+                        return Container();
+                      } else if ((idx + 1) % 2 == 0) {
+                        dataFound = true;
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            customCards(
+                           
+                              name: data[idx],
+                            ),
+                            customCards(
+                      
+                              name: data[idx + 1],
+                            )
+                          ],
+                        );
+                      } else {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            customCards(
+                       
+                              name: val,
+                            ),
+                          ],
+                        );
+                      }
+                    })
+                    .toList()
+                    .reversed
+                    .toList(),
+              ),
+      ],
+    );
+  }
+
+  Future<Map> getData() async {
+    var token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    var data = await Request().send("GET", "/buissness", headers: {
+      "Content-type": "application/json",
+      "Accept": "application/json",
+      "authorization": "Bearer $token",
+    });
+    return data.data;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -19,7 +99,10 @@ class _HomeState extends State<Home> {
         leading: const Icon(Icons.menu),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, "/login");
+            },
             icon: const Icon(Icons.person),
           ),
         ],
@@ -50,77 +133,26 @@ class _HomeState extends State<Home> {
                 width: size.width,
                 height: size.height * 0.75,
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(239, 193, 124, 1.0),
+                  color: MyColors.mustard,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: SearchBar(),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Cards(
-                            imgUrl:
-                                'https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295396__480.png',
-                            name: 'acc.name',
-                            amountCr: 100,
-                            amountDr: 100,
-                          ),
-                          Cards(
-                            imgUrl:
-                                'https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295396__480.png',
-                            name: 'acc.name',
-                            amountCr: 100,
-                            amountDr: 100,
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Cards(
-                            imgUrl:
-                                'https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295396__480.png',
-                            name: 'acc.name',
-                            amountCr: 100,
-                            amountDr: 100,
-                          ),
-                          Cards(
-                            imgUrl:
-                                'https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295396__480.png',
-                            name: 'acc.name',
-                            amountCr: 100,
-                            amountDr: 100,
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Cards(
-                            imgUrl:
-                                'https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295396__480.png',
-                            name: 'acc.name',
-                            amountCr: 100,
-                            amountDr: 100,
-                          ),
-                          Cards(
-                            imgUrl:
-                                'https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295396__480.png',
-                            name: 'acc.name',
-                            amountCr: 100,
-                            amountDr: 100,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+                    scrollDirection: Axis.vertical,
+                    child: FutureBuilder(
+                      future: getData(),
+                      builder: ((context, snapshot) {
+                        if (snapshot.hasData) {
+                          return buildCard(snapshot.data!['buissness'] as List);
+                        } else {
+                          return SizedBox(
+                            height: size.height * 0.75,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                      }),
+                    )),
               ),
             ),
           ],

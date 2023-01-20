@@ -15,11 +15,35 @@ class _GetStatedState extends State<GetStated> {
   var index = 0;
   late FixedExtentScrollController controller;
   var children = [
-    const CustomCards(
-      child: Text("hi"),
+    CustomCards(
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/7.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+      )
     ),
-    const CustomCards(
-      child: Text("hi"),
+    CustomCards(
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/6.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    ),
+    CustomCards(
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/8.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     )
   ];
 
@@ -38,21 +62,12 @@ class _GetStatedState extends State<GetStated> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Get Started'),
-      ),
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/background.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: RotatedBox(
           quarterTurns: 3,
           child: ListWheelScrollView(
             controller: controller,
-            itemExtent: 350,
+            itemExtent: 390,
             physics: const FixedExtentScrollPhysics(),
             onSelectedItemChanged: (value) {
               setState(() {

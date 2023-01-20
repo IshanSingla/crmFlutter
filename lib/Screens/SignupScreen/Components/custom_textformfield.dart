@@ -7,13 +7,14 @@ class CustomTextFromField extends StatelessWidget {
     required this.hintText,
     this.hideText = false,
     required this.validator,
-    this.initialValue,
+    this.initialValue, this.controller,
   }) : super(key: key);
   final IconData icon;
   final String hintText;
   final bool hideText;
   final FormFieldValidator validator;
   final String? initialValue;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     var borderRadius = BorderRadius.circular(5.0);
@@ -22,6 +23,7 @@ class CustomTextFromField extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
+            controller: controller,
             initialValue: initialValue,
             obscureText: hideText,
             decoration: InputDecoration(

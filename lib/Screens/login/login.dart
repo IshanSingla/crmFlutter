@@ -3,6 +3,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:trinetra/request/request.dart';
+
+import '../../utils/colors.dart';
+
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
 
@@ -22,75 +28,91 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceHeightr = MediaQuery.of(context).size.height / 100;
+    double deviceWidthr = MediaQuery.of(context).size.width / 100;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Login",
-          style: TextStyle(
-            fontSize: 30,
+      body: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage("assets/images/bgImage.png"))),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: 20 * deviceHeightr, horizontal: 8 * deviceWidthr),
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: MyColors.mustard),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 5 * deviceWidthr, vertical: 8 * deviceHeightr),
+                child: Form(
+                    key: _formKey,
+                    child: Column(children: [
+                      Text(
+                        "Welcome",
+                        style: TextStyle(
+                            color: MyColors.blue,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const Text("Sign in with your Phone Number"),
+                      const SizedBox(height: 30),
+                      TextFormField(
+                        controller: phoneController,
+
+                        decoration: const InputDecoration(
+                          labelText: "Phone Number",
+                          hintText: "Enter Phone Number",
+                          prefix: Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Text('+91'),
+                          ),
+                        ),
+                        maxLength: 10,
+                        keyboardType: TextInputType.phone,
+                      ),
+                      Visibility(
+                        child: TextField(
+                          controller: otpController,
+                          decoration: const InputDecoration(
+                              labelText: "OTP", hintText: "Enter OTP"),
+                          maxLength: 6,
+                          keyboardType: TextInputType.number,
+                        ),
+                        visible: otpVisibility,
+                      ),
+                      SizedBox(height: 5 * deviceHeightr),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (otpVisibility) {
+                            verifyOTP();
+                          } else {
+                            loginWithPhone();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: MyColors.mustard),
+                        child: Text(
+                          otpVisibility ? "Verify" : "Send Otp",
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ])),
+              ),
+            ),
           ),
-        ),
-        backgroundColor: Colors.indigo[900],
-      ),
-      body: Container(
-        margin: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: phoneController,
-              decoration: const InputDecoration(
-                hintText: 'Phone Number',
-                prefix: Padding(
-                  padding: EdgeInsets.all(4),
-                  child: Text('+91'),
-                ),
-              ),
-              maxLength: 10,
-              keyboardType: TextInputType.phone,
-            ),
-            Visibility(
-              child: TextField(
-                controller: otpController,
-                decoration: const InputDecoration(
-                  hintText: 'OTP',
-                  prefix: Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Text(''),
-                  ),
-                ),
-                maxLength: 6,
-                keyboardType: TextInputType.number,
-              ),
-              visible: otpVisibility,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            MaterialButton(
-              color: Colors.indigo[900],
-              onPressed: () {
-                if (otpVisibility) {
-                  verifyOTP();
-                } else {
-                  loginWithPhone();
-                }
-              },
-              child: Text(
-                otpVisibility ? "Verify" : "Login",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );
   }
 
   void loginWithPhone() async {
+    print("Login with Phone ${phoneController.text}");
     auth.verifyPhoneNumber(
       phoneNumber: "+91${phoneController.text}",
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -137,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void verifyOTP() async {
+    print("Verify OTP");
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationID, smsCode: otpController.text);
 
@@ -147,21 +170,42 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
     ).whenComplete(
-      () {
+      () async {
         if (user != null) {
-          Fluttertoast.showToast(
-            msg: "You are logged in successfully",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
-          if (user!.displayName == null) {
+          print(user);
+
+          if (user?.displayName == null) {
             Navigator.pushReplacementNamed(context, "/login/signup");
           } else {
-            Navigator.pushReplacementNamed(context, "/home");
+            var token = await FirebaseAuth.instance.currentUser?.getIdToken();
+            var data = await Request().send("POST", "/auth/get", headers: {
+              "Content-type": "application/json",
+              "Accept": "application/json",
+              "authorization": "Bearer $token",
+            });
+            if (data.statusCode == 200) {
+              Fluttertoast.showToast(
+                msg: "You are logged in successfully",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+              Navigator.pushReplacementNamed(context, "/home");
+            } else {
+              Fluttertoast.showToast(
+                msg: data.data["message"],
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+              Navigator.pushReplacementNamed(context, "/login/signup");
+            }
           }
         } else {
           Fluttertoast.showToast(
