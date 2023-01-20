@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "55656936373",
+    "project_id": "crm-indusianassist",
+    "storage_bucket": "crm-indusianassist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55656936373:android:926d288dfde9d7dc499ffc",
+        "android_client_info": {
+          "package_name": "com.example.crm_indusianassist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55656936373-nj4b3a289ag5dj1mk34e6e7c823kvct7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApM05reCNkvVo_dSRLpVCAxyjFOSO8M9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55656936373-nj4b3a289ag5dj1mk34e6e7c823kvct7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
