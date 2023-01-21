@@ -52,14 +52,6 @@ class _SplashState extends State<SplashScreen> {
               fit: BoxFit.fill,
             ),
           ),
-          child: Center(
-              child: Container(
-                  height: 200,
-                  width: 200,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage("assets/images/logo.png"))))),
         ));
   }
 }

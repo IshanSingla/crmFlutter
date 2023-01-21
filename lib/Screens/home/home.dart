@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trinetra/request/request.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+// Importing the utils
+import '../../Components/drawer.dart';
 import '../../utils/colors.dart';
 import 'components/search_bar.dart';
 import 'Components/card.dart';
@@ -52,11 +55,9 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             customCards(
-                           
                               name: data[idx],
                             ),
                             customCards(
-                      
                               name: data[idx + 1],
                             )
                           ],
@@ -66,7 +67,6 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             customCards(
-                       
                               name: val,
                             ),
                           ],
@@ -95,8 +95,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
-        leading: const Icon(Icons.menu),
         actions: [
           IconButton(
             onPressed: () {
@@ -157,6 +157,16 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        children: [
+          SpeedDialChild(
+            label: "Add Buissness",
+            child:
+                IconButton(onPressed: () {}, icon: const Icon(Icons.business)),
+          ),
+        ],
       ),
     );
   }

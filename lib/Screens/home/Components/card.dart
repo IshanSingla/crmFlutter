@@ -14,8 +14,7 @@ class customCards extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         buissnessId = name;
-        print(buissnessId);
-        // Navigator.pushNamed(context, '/buissness/dashbord');
+        Navigator.pushNamed(context, '/buissness/dashbord');
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

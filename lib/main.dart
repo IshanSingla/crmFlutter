@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:trinetra/request/request.dart';
+import 'Screens/Buissness/Dashboard/Dashboard.dart';
 import 'Screens/GetStated/GetStated.dart';
 import 'Screens/SignupScreen/SignupScreen.dart';
 import 'Screens/SplashScreens/splash.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/login/signup': (context) => const SignupScreen(),
         '/home': (context) => const Home(),
-        // "/buissness/dashbord": (context) => Dashbord(buissnessId),
+        "/buissness/dashbord": (context) => Dashboard(buissnessId: buissnessId),
       },
     );
   }
