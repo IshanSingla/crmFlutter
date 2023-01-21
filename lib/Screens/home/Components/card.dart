@@ -4,16 +4,17 @@ import '../../../main.dart';
 class customCards extends StatelessWidget {
   const customCards({
     Key? key,
-    required this.name,
+    required this.name, required this.route,
   }) : super(key: key);
 
   final String name;
+  final String route;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        buissnessId = name;
+        buissnessId = route;
         Navigator.pushNamed(context, '/buissness/dashbord');
       },
       child: Padding(

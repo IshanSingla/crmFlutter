@@ -20,6 +20,7 @@ class _HomeState extends State<Home> {
   Widget buildCard(List data) {
     Size size = MediaQuery.of(context).size;
     bool dataFound = false;
+    
     return Column(
       children: [
         const Padding(
@@ -44,30 +45,47 @@ class _HomeState extends State<Home> {
                     .asMap()
                     .entries
                     .map((entry) {
+                      print(entry.value);
                       int idx = entry.key;
-                      String val = entry.value;
+                      Map val = entry.value;
+                      // return Container();
                       if (dataFound) {
                         dataFound = false;
                         return Container();
                       } else if ((idx + 1) % 2 == 0) {
                         dataFound = true;
+                        try{
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             customCards(
-                              name: data[idx],
+                              route: "${data[idx]['_id']}",
+                              name: "${data[idx]['buissnessName']}",
                             ),
                             customCards(
-                              name: data[idx + 1],
+                              route: "${data[idx + 1]['_id']}",
+                              name: "${data[idx + 1]['buissnessName']}",
                             )
                           ],
+                        );}
+                        catch(e){
+                          return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            customCards(
+                              route: "${data[idx]['_id']}",
+                              name: "${data[idx]['buissnessName']}",
+                            ),
+                          ],
                         );
+                        }
                       } else {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             customCards(
-                              name: val,
+                              route: "${data[idx]['_id']}",
+                              name: "${data[idx]['buissnessName']}",
                             ),
                           ],
                         );
@@ -163,8 +181,12 @@ class _HomeState extends State<Home> {
         children: [
           SpeedDialChild(
             label: "Add Buissness",
-            child:
-                IconButton(onPressed: () {}, icon: const Icon(Icons.business)),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/buissness/Add");
+                },
+                icon: const Icon(Icons.business)),
           ),
         ],
       ),

@@ -7,6 +7,7 @@ import 'Screens/Buissness/Dashboard/Dashboard.dart';
 import 'Screens/GetStated/GetStated.dart';
 import 'Screens/SignupScreen/SignupScreen.dart';
 import 'Screens/SplashScreens/splash.dart';
+import 'Screens/home/AddBuissness.dart';
 import 'Screens/home/home.dart';
 import 'firebase_options.dart';
 import 'Screens/login/login.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/login/signup': (context) => const SignupScreen(),
         '/home': (context) => const Home(),
+        "/buissness/Add": (context) => const AddBuissness(),
         "/buissness/dashbord": (context) => Dashboard(buissnessId: buissnessId),
       },
     );
